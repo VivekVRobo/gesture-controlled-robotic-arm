@@ -44,8 +44,8 @@
 ### System Overview
 
 ```
-┌─────────────────────────┐         2.4GHz          ┌──────────────────────────┐
-│   TRANSMITTER (Glove)   │  ────────────────────►  │   RECEIVER (Robot Arm)   │
+┌─────────────────────────┐         2.4GHz           ┌──────────────────────────┐
+│   TRANSMITTER (Glove)   │  ────────────────────►   │   RECEIVER (Robot Arm)   │
 │                         │                          │                          │
 │  MPU6050 (IMU/I2C)      │                          │  nRF24L01 (SPI → D9/10)  │
 │  nRF24L01 (SPI → D9/10) │                          │  PCA9685 (PWM/I2C)       │
@@ -136,7 +136,7 @@ gesture-controlled-robotic-arm/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Install Arduino Libraries
 
@@ -227,6 +227,12 @@ Edit the `config.h` in each sketch folder to match your hardware:
 - [ ] **3D-print a PCB enclosure** for the glove electronics
 - [ ] Replace nRF24L01 with **ESP8266/ESP32** → Wi-Fi + web dashboard
 
+---
+
+---
+## 🌐 Global Engineering Mobility
+**Transitioning to the European Automation Market?**
+I teach engineers how to build, document, and present industrial portfolios exactly like this one to pass strict ATS tracking and impress hiring managers. Access my complete technical career roadmaps, CV templates, and company checklists at [ScholarMap]
 ---
 
 ## 📄 License
