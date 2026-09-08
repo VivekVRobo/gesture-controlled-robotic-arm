@@ -3,7 +3,7 @@
  * @brief Gesture Glove Transmitter — Arduino Nano
  *
  * Gesture-Controlled Robotic Arm Project
- * GitHub: https://github.com/VIvekVRobotics/gesture-controlled-robotic-arm
+ * GitHub: https://github.com/vasu4990/gesture-controlled-robotic-arm
  *
  * Hardware:
  *   - Arduino Nano

@@ -3,20 +3,23 @@
  * @brief Robotic Arm Receiver — Arduino Uno
  *
  * Gesture-Controlled Robotic Arm Project
- * GitHub: https://github.com/VIvekVRobotics/gesture-controlled-robotic-arm
+ * GitHub: https://github.com/vasu4990/gesture-controlled-robotic-arm
  *
  * Hardware:
  *   - Arduino Uno
  *   - PCA9685 16-channel PWM driver (I2C: SDA=A4, SCL=A5)
  *   - nRF24L01 2.4GHz transceiver (SPI: CE=D9, CSN=D10)
- *   - MG996R servos (4x) on PCA9685 channels 0–3
+ *   - hobby servos on PCA9685 channels 0–3
  *
  * Libraries required (install via Arduino Library Manager):
  *   - RF24 by TMRh20
  *   - Adafruit PWM Servo Driver Library by Adafruit
  *
- * Signal flow:
- *   nRF24L01 RX → inverse kinematics → interpolation → PCA9685 → servos
+ * Active signal flow:
+ *   nRF24L01 RX → joint limits → interpolation → PCA9685 → servos
+ *
+ * Note: a two-link inverse-kinematics helper is included below for future
+ * Cartesian-command experiments, but it is not used by the active packet path.
  */
 
 #include "config.h"
@@ -82,6 +85,8 @@ float interpolate(float current, float target) {
  * Inverse Kinematics — law of cosines.
  * Maps (x, y) end-effector Cartesian position → (θ1, θ2) joint angles.
  * Returns false if target is out of reach.
+ *
+ * This helper is not part of the active gesture packet path.
  */
 bool inverseKinematics(float x, float y, float &theta1, float &theta2) {
   float L1 = LINK1_LEN;
@@ -151,16 +156,15 @@ void loop() {
     float targetGripper =
         constrain((float)pkt.gripperAngle, GRIPPER_OPEN, GRIPPER_CLOSED);
 
-    // Optional: run IK for shoulder + elbow using a virtual target derived from
-    // packet (uncomment and adapt to send x/y coordinates instead of raw
-    // angles)
+    // Optional future Cartesian command path. This is intentionally disabled;
+    // the current transmitter sends joint-angle targets directly.
     /*
-    float x = pkt.baseAngle;    // map to a Cartesian X
-    float y = pkt.shoulderAngle; // map to a Cartesian Y
+    float x = pkt.baseAngle;
+    float y = pkt.shoulderAngle;
     float ikShoulder, ikElbow;
     if (inverseKinematics(x, y, ikShoulder, ikElbow)) {
         targetShoulder = ikShoulder;
-        targetElbow    = ikElbow;
+        targetElbow = ikElbow;
     }
     */
 
