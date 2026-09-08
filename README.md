@@ -261,6 +261,6 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fo
 
 <div align="center">
 
-**Built by [Vivek V](https://github.com/VIvekVRobotics) · Star ⭐ this repo if you found it useful!**
+**Built by [Vivek V](https://github.com/VivekVRobo) · Star ⭐ this repo if you found it useful!**
 
 </div>
