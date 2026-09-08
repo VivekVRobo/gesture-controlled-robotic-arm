@@ -17,11 +17,26 @@
 
 ---
 
-## 📽️ Demo
+## 📽️ Physical Demonstration & Actuation Evidence
 
-> **[▶ Watch the full live demo (27 seconds)](docs/demo.mp4)**
+<div align="center">
 
+<img src="docs/media/gesture_arm_demo.gif" alt="Gesture Controlled Robotic Arm Physical Actuation" width="420"/>
+
+<br/>
+
+*Live physical hardware test: Human gesture glove driving 3-DOF arm articulation, gripper open/close actuation, and base turntable panning in real time.*
+
+</div>
+
+- **Continuous Demonstration Take:** [`docs/media/physical_actuation_evidence.mp4`](docs/media/physical_actuation_evidence.mp4) (22s continuous uncut shot showing live serial transmission, glove flexion, and robotic arm response).
+- **Physical Bench Hardware:** [`docs/images/robotic_arm_hardware_bench.jpg`](docs/images/robotic_arm_hardware_bench.jpg) (3D-printed PETG/PLA frame, SG90 micro-servos, 4-bar linkage).
+- **Control Latency:** ~25–80ms end-to-end IMU/flex sensor acquisition to servo displacement.
+- **Electrical Isolation:** Dedicated 5V external power rail with common ground to prevent brownout resets during servo inrush.
+
+<div align="center">
 <img src="docs/images/arm-and-glove.png" alt="Complete system — glove and arm on desk" width="680"/>
+</div>
 
 ---
 
@@ -63,9 +78,9 @@
 | MPU6050 IMU | 6-axis orientation sensing | 1 |
 | nRF24L01 (with antenna) | 2.4GHz wireless link | 2 |
 | PCA9685 PWM driver | I2C servo coordination | 1 |
-| MG996R servo motor | Joint actuation | 4 |
-| 3D-printed arm kit | Structural frame (PLA) | 1 |
-| 5V 3A power supply | Servo power rail | 1 |
+| TowerPro SG90 (or MG996R) servos | Joint actuation (Base, Shoulder, Elbow, Gripper) | 4 |
+| 3D-printed articulated arm | 4-bar parallel linkage frame (PLA / PETG) | 1 |
+| 5V 2A–3A DC bench supply | Dedicated servo power rail (shared ground) | 1 |
 | Breadboard + wires | Prototyping | — |
 | 470µF + 100µF capacitors | Decoupling/filtering | 2 |
 | Safety glove | Wearable glove base | 1 |
@@ -122,11 +137,14 @@ gesture-controlled-robotic-arm/
 │   │   ├── transmitter-wiring.md   # Glove pin mapping & wiring guide
 │   │   └── receiver-wiring.md      # Arm pin mapping & wiring guide
 │   ├── images/
+│   │   ├── robotic_arm_hardware_bench.jpg  # Physical hardware bench verification photo
 │   │   ├── gesture-glove.png
 │   │   ├── arm-and-glove.png
 │   │   ├── electronics-overview.jpg
 │   │   └── robotic-arm-assembly.jpg
-│   └── demo.mp4                     # Live demo video
+│   └── media/
+│       ├── gesture_arm_demo.gif            # 10s looping hardware actuation demo
+│       └── physical_actuation_evidence.mp4 # Full 22s continuous uncut demonstration take
 │
 ├── copy-assets.ps1              # Helper: copies images/video into docs/
 ├── .gitignore
