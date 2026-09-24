@@ -20,12 +20,18 @@ An Arduino embedded robotics system controlling a multi-joint articulated arm fr
 
 - **Continuous Demonstration Take:** [`docs/media/physical_actuation_evidence.mp4`](docs/media/physical_actuation_evidence.mp4) (22s continuous uncut take showing live radio transmission, glove flexion, and robotic arm response).
 - **Physical Bench Hardware:** [`docs/images/robotic_arm_hardware_bench.jpg`](docs/images/robotic_arm_hardware_bench.jpg) (3D-printed PETG/PLA 4-bar parallel linkage frame, SG90/MG996R servos, turntable base).
-- **Control Latency:** ~25–80ms end-to-end IMU/flex sensor acquisition to servo displacement.
+- **Control Latency:** quantitative end-to-end measurement is still open and tracked in [issue #1](https://github.com/VivekVRobo/gesture-controlled-robotic-arm/issues/1); the repository does not treat an estimate as measured evidence.
 - **Electrical Isolation:** Dedicated 5V external power rail with common ground to prevent brownout resets during servo inrush.
 
 <div align="center">
 <img src="docs/images/arm-and-glove.png" alt="Complete system — glove and arm on desk" width="680"/>
 </div>
+
+---
+
+## 🌱 Contributing
+
+Contributions are welcome in firmware, CI, testing, reproducible RF/latency benchmarking, wiring documentation, servo calibration, and safety behavior. See [CONTRIBUTING.md](CONTRIBUTING.md) and look for issues labeled `good first issue` or `help wanted`.
 
 ---
 
@@ -47,7 +53,7 @@ An Arduino embedded robotics system controlling a multi-joint articulated arm fr
 [Map: Pitch/Roll → Servo 0–180°]
        │
        ▼
-[nRF24L01 TX → 2.4GHz → nRF24L01 RX]   ~80ms latency packet stream
+[nRF24L01 TX → 2.4GHz → nRF24L01 RX]   RF command stream
        │
        ▼
 [Joint Clamping & Servo Interpolation (INTERP_STEP=2°)]
@@ -128,6 +134,7 @@ gesture-controlled-robotic-arm/
 │       ├── gesture_arm_demo.gif            # 10s looping hardware actuation demo
 │       └── physical_actuation_evidence.mp4 # Full 22s continuous uncut demonstration take
 ├── copy-assets.ps1              # Asset management helper
+├── CONTRIBUTING.md              # Contributor and evidence guidelines
 ├── LICENSE
 └── README.md
 ```
