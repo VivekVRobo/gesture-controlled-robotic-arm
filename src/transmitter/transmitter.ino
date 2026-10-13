@@ -90,6 +90,9 @@ struct RawIMU {
   float gx, gy, gz; // Gyroscope (°/s)
 };
 
+RawIMU readIMU();
+void updateAngles(const RawIMU &imu, float dt);
+
 RawIMU readIMU() {
   Wire.beginTransmission(MPU_ADDR);
   Wire.write(0x3B); // Starting register: ACCEL_XOUT_H

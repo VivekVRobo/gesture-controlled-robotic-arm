@@ -271,6 +271,29 @@ This suite validates software behavior. It is not treated as a substitute for ph
 
 ## Bring Up
 
+### Reproducible compile checks
+
+The firmware compile gate uses Arduino CLI 1.5.1 with these pinned dependencies:
+
+* Arduino AVR Boards 1.8.8
+* RF24 1.6.2
+* Adafruit BusIO 1.17.4
+* Adafruit PWM Servo Driver Library 3.0.3
+
+Run the same checks locally from the repository root:
+
+```sh
+arduino-cli core update-index
+arduino-cli core install arduino:avr@1.8.8
+arduino-cli lib install RF24@1.6.2
+arduino-cli lib install "Adafruit BusIO@1.17.4"
+arduino-cli lib install --no-deps "Adafruit PWM Servo Driver Library@3.0.3"
+arduino-cli compile --fqbn arduino:avr:nano src/transmitter
+arduino-cli compile --fqbn arduino:avr:uno src/receiver
+```
+
+These commands compile the documented Arduino Nano transmitter and Arduino Uno receiver. They do not upload firmware or exercise the physical radio and actuator paths.
+
 ### 1. Wire the transmitter and receiver
 
 Use:
