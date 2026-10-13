@@ -1,0 +1,36 @@
+name: Arduino compile
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@81d310742121c928ea9c8bbd407b4217b432ae02 # v2
+        with:
+          version: 1.5.1
+
+      - name: Install pinned board core and libraries
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr@1.8.8
+          arduino-cli lib install RF24@1.6.2
+          arduino-cli lib install "Adafruit BusIO@1.17.4"
+          arduino-cli lib install --no-deps "Adafruit PWM Servo Driver Library@3.0.3"
+
+      - name: Compile transmitter for Arduino Nano
+        run: arduino-cli compile --fqbn arduino:avr:nano src/transmitter
+
+      - name: Compile receiver for Arduino Uno
+        run: arduino-cli compile --fqbn arduino:avr:uno src/receiver
