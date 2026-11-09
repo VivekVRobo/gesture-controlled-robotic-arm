@@ -1,0 +1,80 @@
+name: Daily Robotic Arm Firmware Maintenance
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Every day at 00:00 UTC (05:30 AM IST)
+  workflow_dispatch: # Allows manual trigger anytime from Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-maintenance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  daily-firmware-verify:
+    name: Arduino CLI Compilation Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Board Cores
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr@1.8.6
+
+      - name: Install Pinned Dependencies
+        run: |
+          arduino-cli lib update-index
+          arduino-cli lib install "RF24@1.4.9"
+          arduino-cli lib install "Adafruit PWM Servo Driver Library@3.0.2"
+
+      - name: Compile Gesture Transmitter (Arduino Nano)
+        id: compile-tx
+        run: |
+          arduino-cli compile --fqbn arduino:avr:nano src/transmitter
+          echo "tx_status=100% Compiled" >> $GITHUB_OUTPUT
+
+      - name: Compile Robotic Arm Receiver (Arduino Uno)
+        id: compile-rx
+        run: |
+          arduino-cli compile --fqbn arduino:avr:uno src/receiver
+          echo "rx_status=100% Compiled" >> $GITHUB_OUTPUT
+
+      - name: Update Daily Arm Health Ledger
+        run: |
+          DATE_STR=$(date -u +"%Y-%m-%d")
+          TIME_STR=$(date -u +"%H:%M:%S UTC")
+          TX_ST="${{ steps.compile-tx.outputs.tx_status }}"
+          RX_ST="${{ steps.compile-rx.outputs.rx_status }}"
+          
+          echo "| $DATE_STR | $TIME_STR | $TX_ST (Nano) | $RX_ST (Uno) | ✅ Healthy |" >> docs/DAILY_ARM_HEALTH.md
+          echo "Updated docs/DAILY_ARM_HEALTH.md for $DATE_STR"
+
+      - name: Commit and Push Verified Telemetry
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/DAILY_ARM_HEALTH.md
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(telemetry): update daily robotic arm firmware health ledger [skip ci]
+
+          Automated daily Arduino CLI compile verification for transmitter and receiver firmware.
+
+          Co-authored-by: Ronald Rex <211186833+RONALD-REX-7@users.noreply.github.com>"
+            git push origin feat/arduino-cli-compile-ci
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

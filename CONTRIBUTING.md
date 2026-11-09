@@ -14,6 +14,33 @@ This repository is intended to stay reproducible and evidence-based. Contributio
 - test coverage for packet parsing, mapping, and kinematics
 - clearly documented hardware reproduction reports
 
+## Local Firmware Compilation Verification (`arduino-cli`)
+
+Before submitting firmware modifications, verify that both sketches compile cleanly using `arduino-cli`:
+
+1. **Install Arduino CLI** and initialize board indices:
+   ```bash
+   arduino-cli core update-index
+   arduino-cli core install arduino:avr@1.8.6
+   ```
+
+2. **Install Pinned Dependencies**:
+   ```bash
+   arduino-cli lib update-index
+   arduino-cli lib install "RF24@1.4.9"
+   arduino-cli lib install "Adafruit PWM Servo Driver Library@3.0.2"
+   ```
+
+3. **Compile Transmitter (Arduino Nano)**:
+   ```bash
+   arduino-cli compile --fqbn arduino:avr:nano src/transmitter
+   ```
+
+4. **Compile Hardened Receiver (Arduino Uno)**:
+   ```bash
+   arduino-cli compile --fqbn arduino:avr:uno src/receiver
+   ```
+
 ## Before opening a pull request
 
 1. Open or reference an issue describing the change.

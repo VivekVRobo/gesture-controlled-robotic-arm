@@ -1,0 +1,39 @@
+name: Arduino Firmware CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  compile:
+    name: Compile Firmware (Arduino CLI)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Board Cores
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr@1.8.6
+
+      - name: Install Pinned Dependencies
+        run: |
+          arduino-cli lib update-index
+          arduino-cli lib install "RF24@1.4.9"
+          arduino-cli lib install "Adafruit PWM Servo Driver Library@3.0.2"
+
+      - name: Compile Gesture Transmitter (Arduino Nano)
+        run: |
+          arduino-cli compile --fqbn arduino:avr:nano src/transmitter
+
+      - name: Compile Hardened Robotic Arm Receiver (Arduino Uno)
+        run: |
+          arduino-cli compile --fqbn arduino:avr:uno src/receiver
+

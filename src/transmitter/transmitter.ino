@@ -36,6 +36,12 @@ struct ControlPacket {
   uint8_t gripperAngle;  // 0–180°
 };
 
+// ─── Raw IMU Data ────────────────────────────────────────────────────────────
+struct RawIMU {
+  float ax, ay, az; // Accelerometer (g)
+  float gx, gy, gz; // Gyroscope (°/s)
+};
+
 // ─── IMU State
 // ────────────────────────────────────────────────────────────────
 float pitch = 0.0f;
@@ -85,11 +91,6 @@ void setup() {
 
 // ─── Read IMU Raw Data
 // ────────────────────────────────────────────────────────
-struct RawIMU {
-  float ax, ay, az; // Accelerometer (g)
-  float gx, gy, gz; // Gyroscope (°/s)
-};
-
 RawIMU readIMU() {
   Wire.beginTransmission(MPU_ADDR);
   Wire.write(0x3B); // Starting register: ACCEL_XOUT_H

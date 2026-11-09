@@ -28,3 +28,6 @@ ehthumbs.db
 
 # Large binary assets (reference locally, not tracked in git)
 docs/demo.mp4
+
+__pycache__/
+*.pyc
